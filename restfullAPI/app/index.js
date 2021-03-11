@@ -6,6 +6,7 @@ const url = require('url')
 const { StringDecoder } = require('string_decoder')
 const config = require('./config') //no need to specify config.js
 const fs = require('fs')
+const { callbackify } = require('util')
 
 //instantiate HTTP server
 const httpServer = http.createServer(function (req, res) {
@@ -85,9 +86,11 @@ var unifideServer = function (req, res) {
 }
 
 let handlers = {}
-handlers.samplehandler = function (data, callback) { //gets data from chosenHandler function
-  callback(406, { 'name': 'sample handler' })
+
+handlers.ping = function (data, callback) {
+  callback(200)
 }
+
 handlers.testHandler = function (data, callback) { //gets data from chosenHandler function
   callback(403, { 'name': 'my test handler ;)' })
 }
@@ -95,7 +98,7 @@ handlers.notFound = function (data, callback) {
   callback(404)
 }
 let router = {
-  'sample': handlers.samplehandler, //function that lives here and will be called on router[sample]
+  'ping': handlers.ping, //function that lives here and will be called on router[ping]
   'test': handlers.testHandler
 }
 
