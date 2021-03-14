@@ -6,35 +6,18 @@ const url = require('url')
 const { StringDecoder } = require('string_decoder')
 const config = require('./lib/config') //no need to specify config.js
 const fs = require('fs')
+const handlers = require('./lib/handlers')
+const helpers = require('./lib/helpers')
 
 var _data = require('./lib/data')
 var _test = require('./test/test')
-const handlers = require('./lib/handlers')
-const helpers = require('./lib/helpers')
+
 _test.symbolInObject()
 _test.closureCustomUrl()
 _test.symbolIteratorGenerator()
-//fs functions:
+_test.arrowFunctionsAndThis()
+_test.loopsOfAllKinds()
 
-//@TODO delete
-// _data.create('test', 'newTestFile', { 'foo': 'poo' }, function (err) {
-//   console.log('error was like this: ', err)
-// })
-
-//@TODO delete
-// _data.read('test', 'newTestFile', function (err, data) {
-//   console.log(`error: ${err} | data: ${data}`)
-// })
-
-//@TODO delete
-// _data.update('test', 'newTestFile', { 'lala': 'land' }, function (err) {
-//   console.log(`error: ${err}`)
-// })
-
-//@TODO delete
-_data.delete('test', 'newTestFile', function (err) {
-  console.log(`error: ${err}`)
-})
 
 //instantiate HTTP server
 const httpServer = http.createServer(function (req, res) {
