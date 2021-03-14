@@ -4,9 +4,37 @@ const http = require('http')
 const https = require('https')
 const url = require('url')
 const { StringDecoder } = require('string_decoder')
-const config = require('./config') //no need to specify config.js
+const config = require('./lib/config') //no need to specify config.js
 const fs = require('fs')
-const { callbackify } = require('util')
+
+var _data = require('./lib/data')
+var _test = require('./test/test')
+const handlers = require('./lib/handlers')
+const helpers = require('./lib/helpers')
+_test.symbolInObject()
+_test.closureCustomUrl()
+_test.symbolIteratorGenerator()
+//fs functions:
+
+//@TODO delete
+// _data.create('test', 'newTestFile', { 'foo': 'poo' }, function (err) {
+//   console.log('error was like this: ', err)
+// })
+
+//@TODO delete
+// _data.read('test', 'newTestFile', function (err, data) {
+//   console.log(`error: ${err} | data: ${data}`)
+// })
+
+//@TODO delete
+// _data.update('test', 'newTestFile', { 'lala': 'land' }, function (err) {
+//   console.log(`error: ${err}`)
+// })
+
+//@TODO delete
+_data.delete('test', 'newTestFile', function (err) {
+  console.log(`error: ${err}`)
+})
 
 //instantiate HTTP server
 const httpServer = http.createServer(function (req, res) {
@@ -17,7 +45,6 @@ const httpServer = http.createServer(function (req, res) {
 //start the HTTP server
 httpServer.listen(config.httpPort, function () {
   console.log(`server is listening on port ${config.httpPort}, and enviroment is ${config.envName} mode`)
-  //œ∑´®†¥¨ˆøπåß∂ƒ©˙∆˚¬…≈ç√∫˜µ≤≥≥≥«æ˜ ˜˜˜˜∫∫˜µ≈ç√∫˜µ≤≥∞§¢£™£∞§¶•ªº
 })
 
 //ssl 
@@ -55,13 +82,13 @@ var unifideServer = function (req, res) {
     buffer += decoder.end()
     console.log(router[trimmedpath])
     let chosenHandler = typeof (router[trimmedpath]) !== 'undefined' ? router[trimmedpath] : handlers.notFound
-    //construnct the data object to send to the handler
+    //construct the data object to send to the handler
     let data = {
       'trimmedpath': trimmedpath,
-      'payload': buffer,
       'headers': headers,
       'queryStringObject': queryStringObject,
-      'method': method
+      'method': method,
+      'payload': helpers.parsJsonToObject(buffer)
     }
     //route the request to the handler specified  in the router 
     chosenHandler(data, function (statusCode, payload) {
@@ -76,28 +103,10 @@ var unifideServer = function (req, res) {
       console.log('returning this response:', statusCode, payloadString)
     })
 
-    // res.end('req.ended:', ' Hellooooo\n')
-    // res.end('Helloooooo\n')
-
-    //console.log('headers:', headers)
-    // console.log('request payload is:', buffer)
-    //console.log(`Request recieved at path: ${trimmedpath} method: ${method} and  with this query string parameters:`, queryStringObject)
   })
 }
-
-let handlers = {}
-
-handlers.ping = function (data, callback) {
-  callback(200)
-}
-
-handlers.testHandler = function (data, callback) { //gets data from chosenHandler function
-  callback(403, { 'name': 'my test handler ;)' })
-}
-handlers.notFound = function (data, callback) {
-  callback(404)
-}
 let router = {
+  'users': handlers.users,
   'ping': handlers.ping, //function that lives here and will be called on router[ping]
   'test': handlers.testHandler
 }
