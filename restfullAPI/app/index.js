@@ -12,11 +12,13 @@ const helpers = require('./lib/helpers')
 var _data = require('./lib/data')
 var _test = require('./test/test')
 
-_test.symbolInObject()
-_test.closureCustomUrl()
-_test.symbolIteratorGenerator()
-_test.arrowFunctionsAndThis()
-_test.loopsOfAllKinds()
+
+//@TODO: move to test project 
+// _test.symbolInObject()
+// _test.closureCustomUrl()
+// _test.symbolIteratorGenerator()
+// _test.arrowFunctionsAndThis()
+// _test.loopsOfAllKinds()
 
 
 //instantiate HTTP server
@@ -90,7 +92,7 @@ var unifideServer = function (req, res) {
 }
 let router = {
   'users': handlers.users,
-  'ping': handlers.ping, //function that lives here and will be called on router[ping]
-  'test': handlers.testHandler
+  'ping': handlers.ping, //function that lives here and will be called on router[ping]ddd
+  'test': handlers.testHandler,
+  'tokens': handlers.tokens
 }
-

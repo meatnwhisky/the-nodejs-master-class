@@ -4,8 +4,8 @@ var enviroments = {
 }
 
 enviroments.staging = {
-  'httpPort': 3000,
-  'httpsPort': 3001,
+  'httpPort': 3030,
+  'httpsPort': 3031,
   'envName': 'staging',
   'hashingSecret': 'thisIsASecret'
 }
